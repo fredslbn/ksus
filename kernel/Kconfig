@@ -41,7 +41,7 @@ config KSU_SUSFS_SUS_MOUNT
 config KSU_SUSFS_SUS_MOUNT_MNT_ID_REORDER
     bool "Enable to re-order mount id and parent mount id in mountinfo (experimental)"
     depends on KSU_SUSFS_SUS_MOUNT
-    default y
+    default n
     help
       - Enable this option will automatically and completely re-order the mount id and parent mount id in /proc/self/mountinfo
       - The actual mnt_id/parent_mnt_id is not changed in kernel, only reflects on /proc/self/mountinfo
