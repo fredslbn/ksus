@@ -17,7 +17,7 @@ ccflags-y += -I$(objtree)/security/selinux -include $(srctree)/include/uapi/asm-
 obj-$(CONFIG_KSU) += kernelsu.o
 
 # hardcode!
-$(eval KSU_VERSION=11944)
+$(eval KSU_VERSION=11682)
 $(info -- KernelSU version: $(KSU_VERSION))
 ccflags-y += -DKSU_VERSION=$(KSU_VERSION)
 
@@ -58,6 +58,7 @@ endif
 ccflags-y += -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-int-conversion -Wno-gcc-compat
 ccflags-y += -Wno-declaration-after-statement -Wno-unused-function
 
+ifeq ($(shell test -e $(srctree)/fs/susfs.c; echo $$?),0)
 ifdef KSU_SUSFS
 ccflags-y += -DKSU_SUSFS
 endif
@@ -67,20 +68,11 @@ endif
 ifdef KSU_SUSFS_SUS_MOUNT
 ccflags-y += -DKSU_SUSFS_SUS_MOUNT
 endif
-ifdef KSU_SUSFS_SUS_MOUNT_MNT_ID_REORDER
-ccflags-y += -DKSU_SUSFS_SUS_MOUNT_MNT_ID_REORDER
-endif
 ifdef KSU_SUSFS_SUS_KSTAT
 ccflags-y += -DKSU_SUSFS_SUS_KSTAT
 endif
-ifdef KSU_SUSFS_SUS_MAPS
-ccflags-y += -DKSU_SUSFS_SUS_MAPS
-endif
-ifdef KSU_SUSFS_SUS_PROC_FD_LINK
-ccflags-y += -DKSU_SUSFS_SUS_PROC_FD_LINK
-endif
-ifdef KSU_SUSFS_SUS_MEMFD
-ccflags-y += -DKSU_SUSFS_SUS_MEMFD
+ifdef KSU_SUSFS_SUS_OVERLAYFS
+ccflags-y += -DKSU_SUSFS_SUS_OVERLAYFS
 endif
 ifdef KSU_SUSFS_TRY_UMOUNT
 ccflags-y += -DKSU_SUSFS_TRY_UMOUNT
@@ -90,6 +82,13 @@ ccflags-y += -DKSU_SUSFS_SPOOF_UNAME
 endif
 ifdef KSU_SUSFS_ENABLE_LOG
 ccflags-y += -DKSU_SUSFS_ENABLE_LOG
+endif
+ifdef KSU_SUSFS_SUS_SU
+ccflags-y += -DKSU_SUSFS_SUS_SU
+endif
+else
+$(info -- You have not integrate susfs in your kernel.)
+$(info -- Read: https://gitlab.com/simonpunk/susfs4ksu)
 endif
 
 # Keep a new line here!! Because someone may append config
